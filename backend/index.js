@@ -1,16 +1,5 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+const app = require("./app");
 const logger = require("./utils/logger");
-const blogRouter = require("./controller/blog");
-
-const app = express();
-
-app.use(express.json());
-
-// ROUTER
-
-app.use("/api/blog", blogRouter);
 
 // PORT
 const PORT = 5000;

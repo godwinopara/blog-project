@@ -7,7 +7,7 @@ const config = require("./utils/config");
 
 const app = express();
 
-// CONNECT MONGODB
+// ESTABLISH CONNECTION MONGODB DATABASE
 
 mongoose.set("strictQuery", false);
 
@@ -20,7 +20,7 @@ mongoose
 		logger.error(`error connecting to MongoDB`, error.message);
 	});
 
-// MIDDLEWARE
+// MIDDLEWARES
 
 app.use(cors());
 app.use(express.json());

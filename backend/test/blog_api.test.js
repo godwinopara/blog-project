@@ -2,29 +2,15 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../model/blog");
+const helper = require("../test/test_helper");
 
 const api = supertest(app);
 
-const initialBlogs = [
-	{
-		title: "Modern Javascript",
-		author: "Frank Moore",
-		url: "https://github.com",
-		likes: 10,
-	},
-	{
-		title: "Html is easy",
-		author: "Martins kings",
-		url: "https://github.com",
-		likes: 5,
-	},
-];
-
 beforeEach(async () => {
 	await Blog.deleteMany({});
-	let blogObject = new Blog(initialBlogs[0]);
+	let blogObject = new Blog(helper.initialBlogs[0]);
 	await blogObject.save();
-	blogObject = new Blog(initialBlogs[1]);
+	blogObject = new Blog(helper.initialBlogs[1]);
 	await blogObject.save();
 }, 10000);
 
@@ -41,8 +27,7 @@ test("blog list are returned as json", async () => {
 
 test("all blogs are required", async () => {
 	const response = await api.get("/api/blogs");
-
-	expect(response.body).toHaveLength(initialBlogs.length);
+	expect(response.body).toHaveLength(helper.initialBlogs.length);
 }, 10000);
 
 // TEST THAT RETURNS THE FIRST BLOG POST
@@ -77,11 +62,10 @@ test("a valid blog can be added", async () => {
 		.expect(201)
 		.expect("Content-Type", /application\/json/);
 
-	const response = await api.get("/api/blogs");
+	const response = await helper.blogsInDb();
+	expect(response).toHaveLength(helper.initialBlogs.length + 1);
 
-	const contents = response.body.map((r) => r.title);
-
-	expect(response.body).toHaveLength(initialBlogs.length + 1);
+	const contents = response.map((r) => r.title);
 	expect(contents).toContain("async/await simplifies making async calls");
 }, 10000);
 
@@ -96,8 +80,8 @@ test("blog without content is not added", async () => {
 
 	await api.post("/api/blogs").send(newBlog).expect(400);
 
-	const response = await api.get("/api/blogs");
-	expect(response).toHaveLength(initialBlogs.length);
+	const response = await helper.blogsInDb();
+	expect(response).toHaveLength(helper.initialBlogs.length);
 });
 
 afterAll(async () => {

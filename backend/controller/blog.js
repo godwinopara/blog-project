@@ -1,5 +1,6 @@
 const blogRouter = require("express").Router();
 const Blog = require("../model/blog");
+require("express-async-errors");
 
 // GET ALL BLOG POSTS
 
@@ -10,13 +11,13 @@ blogRouter.get("/", async (req, res) => {
 
 // GET SINGLE BLOG POST
 
-blogRouter.get("/:id", async (req, res, next) => {
-	const id = req.params.id;
+blogRouter.get("/:id", async (request, response, next) => {
+	const id = request.params.id;
 	const blog = await Blog.findById(id);
 	if (blog) {
-		res.json(blog);
+		response.json(blog);
 	} else {
-		res.status(404).end();
+		response.status(404).send("Invalid Id");
 	}
 });
 

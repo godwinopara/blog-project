@@ -7,7 +7,7 @@ GET http://localhost:5000/api/blogs/648730f6393c6cf2122f0bf6 HTTP/1.1
 
 
 ###
-DELETE http://localhost:5000/api/blogs/6487592792fb3a74691c76f9
+DELETE http://localhost:5000/api/blogs/64875a070ce7c166399ed7c1
 
 ###
 POST http://localhost:5000/api/blogs HTTP/1.1

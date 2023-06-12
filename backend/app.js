@@ -1,12 +1,21 @@
+// Npm Packages Imports
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const logger = require("./utils/logger");
-const blogRouter = require("./controller/blog");
-const config = require("./utils/config");
-const middleware = require("./utils/middleware");
 require("express-async-errors");
 
+// Utilities Imports
+const config = require("./utils/config");
+const logger = require("./utils/logger");
+
+// Middleware
+const middleware = require("./utils/middleware");
+
+//Routers
+const blogRouter = require("./controller/blog");
+const userRouter = require("./controller/user");
+
+// Instatiate App
 const app = express();
 
 // ESTABLISH CONNECTION MONGODB DATABASE
@@ -31,6 +40,7 @@ app.use(middleware.requestLogger);
 // ROUTER
 
 app.use("/api/blogs", blogRouter);
+app.use("/api/users", userRouter);
 
 // ERROR HANDLING MIDDLEWARES
 

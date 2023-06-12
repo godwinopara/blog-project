@@ -27,6 +27,6 @@ app.use(express.json());
 
 // ROUTER
 
-app.use("/api/blog", blogRouter);
+app.use("/api/blogs", blogRouter);
 
 module.exports = app;

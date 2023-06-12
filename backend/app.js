@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const logger = require("./utils/logger");
 const blogRouter = require("./controller/blog");
 const config = require("./utils/config");
+const middleware = require("./utils/middleware");
 
 const app = express();
 
@@ -24,9 +25,15 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+app.use(middleware.requestLogger);
 
 // ROUTER
 
 app.use("/api/blogs", blogRouter);
+
+// ERROR HANDLING MIDDLEWARES
+
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 module.exports = app;

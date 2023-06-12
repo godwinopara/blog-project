@@ -26,13 +26,17 @@ blogRouter.delete("/:id", async (req, res) => {
 
 // ADD BLOG POST
 
-blogRouter.post("/", async (req, res) => {
+blogRouter.post("/", async (req, res, next) => {
 	const body = req.body;
 
 	const blog = new Blog(body);
 
-	const newBlog = await blog.save();
-	res.status(201).json(newBlog);
+	try {
+		const newBlog = await blog.save();
+		res.status(201).json(newBlog);
+	} catch (error) {
+		next(error);
+	}
 });
 
 module.exports = blogRouter;

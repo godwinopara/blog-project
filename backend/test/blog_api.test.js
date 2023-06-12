@@ -83,6 +83,21 @@ test("a valid blog can be added", async () => {
 
 	expect(response.body).toHaveLength(initialBlogs.length + 1);
 	expect(contents).toContain("async/await simplifies making async calls");
+}, 10000);
+
+// TEST FOR MAKING SURE WHEN USER SEND AN EMPTY BLOG OR MISSING PARTS
+// OF A BLOG THE REQUEST IS NOT COMPLETED
+
+test("blog without content is not added", async () => {
+	const newBlog = {
+		title: "You don't know js",
+		author: "James simpson",
+	};
+
+	await api.post("/api/blogs").send(newBlog).expect(400);
+
+	const response = await api.get("/api/blogs");
+	expect(response).toHaveLength(initialBlogs.length);
 });
 
 afterAll(async () => {

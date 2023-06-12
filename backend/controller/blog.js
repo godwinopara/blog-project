@@ -10,33 +10,34 @@ blogRouter.get("/", async (req, res) => {
 
 // GET SINGLE BLOG POST
 
-blogRouter.get("/:id", async (req, res) => {
+blogRouter.get("/:id", async (req, res, next) => {
 	const id = req.params.id;
 	const blog = await Blog.findById(id);
-	res.json(blog);
+	if (blog) {
+		res.json(blog);
+	} else {
+		res.status(404).end();
+	}
 });
 
 // DELETE BLOG POST
 
-blogRouter.delete("/:id", async (req, res) => {
+blogRouter.delete("/:id", async (req, res, next) => {
 	const id = req.params.id;
-	const blog = await Blog.findByIdAndDelete(id);
+	await Blog.findByIdAndDelete(id);
 	res.status(204).end();
 });
 
 // ADD BLOG POST
 
-blogRouter.post("/", async (req, res, next) => {
+blogRouter.post("/", async (req, res) => {
 	const body = req.body;
+	body.likes === undefined ? (body.likes = 0) : body.likes;
 
 	const blog = new Blog(body);
+	const newBlog = await blog.save();
 
-	try {
-		const newBlog = await blog.save();
-		res.status(201).json(newBlog);
-	} catch (error) {
-		next(error);
-	}
+	res.status(201).json(newBlog);
 });
 
 module.exports = blogRouter;

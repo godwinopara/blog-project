@@ -5,6 +5,7 @@ const logger = require("./utils/logger");
 const blogRouter = require("./controller/blog");
 const config = require("./utils/config");
 const middleware = require("./utils/middleware");
+require("express-async-errors");
 
 const app = express();
 

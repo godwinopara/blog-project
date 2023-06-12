@@ -8,11 +8,11 @@ const api = supertest(app);
 
 beforeEach(async () => {
 	await Blog.deleteMany({});
-	let blogObject = new Blog(helper.initialBlogs[0]);
-	await blogObject.save();
-	blogObject = new Blog(helper.initialBlogs[1]);
-	await blogObject.save();
-}, 10000);
+
+	const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
+	const promiseArray = blogObjects.map((blog) => blog.save());
+	await Promise.all(promiseArray);
+});
 
 // TEST TO CHECK IF THE API IS IN "APPLICTION/JSON FORMAT"
 
@@ -82,6 +82,12 @@ test("blog without content is not added", async () => {
 
 	const response = await helper.blogsInDb();
 	expect(response).toHaveLength(helper.initialBlogs.length);
+}, 10000);
+
+//TEST TO CHECK IF ID IS UNDEFINED
+
+test('must have unique identifies "id"', () => {
+	const blogs = 
 });
 
 afterAll(async () => {

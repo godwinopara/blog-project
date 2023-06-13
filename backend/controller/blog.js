@@ -1,5 +1,6 @@
 const blogRouter = require("express").Router();
 const Blog = require("../model/blog");
+const User = require("../model/user");
 require("express-async-errors");
 
 // GET ALL BLOG POSTS
@@ -33,10 +34,21 @@ blogRouter.delete("/:id", async (req, res, next) => {
 
 blogRouter.post("/", async (req, res) => {
 	const body = req.body;
-	body.likes === undefined ? (body.likes = 0) : body.likes;
 
-	const blog = new Blog(body);
+	const user = await User.findById(body.userId);
+
+	const blog = new Blog({
+		title: body.title,
+		author: body.author,
+		url: body.url,
+		likes: body.likes || 0,
+		userId: body.userId,
+	});
+
 	const newBlog = await blog.save();
+
+	user.blogs = user.blogs.concat(newBlog._id);
+	await user.save();
 
 	res.status(201).json(newBlog);
 });

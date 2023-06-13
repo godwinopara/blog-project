@@ -7,7 +7,7 @@ GET http://localhost:5000/api/blogs/648730f6393c6cf2122f0bf6 HTTP/1.1
 
 
 ###
-DELETE http://localhost:5000/api/blogs/64875a070ce7c166399ed7c1
+DELETE http://localhost:5000/api/blogs/648730f6393c6cf2122f0bf6
 
 ###
 POST http://localhost:5000/api/blogs HTTP/1.1
@@ -16,5 +16,7 @@ Content-Type: application/json
 {
     "title": "You don't know js",
     "author": "Simpson",
-    "url": "https://github.com"
+    "url": "https://github.com",
+    "userId": "6487aad0be114157b9889090"
+    
 }

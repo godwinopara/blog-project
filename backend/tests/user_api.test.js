@@ -38,4 +38,20 @@ describe("when there is initially one user in the DB", () => {
 		const usernames = users.map((user) => user.username);
 		expect(usernames).toContain(newUser.username);
 	});
+
+	test("should creation fails with proper statusCode and message if username already taken", async () => {
+		const userAtStart = await helper.usersInDb();
+		const newUser = {
+			username: "mluukkai",
+			name: "Matti Luukkainen",
+			password: "salainen",
+		};
+
+		const result = await api.post("/api/users").send(newUser).expect(400);
+
+		expect(request.body).toContain("expected `username` to be unique");
+
+		const users = await helper.usersInDb();
+		expect(users).toHaveLength(userAtStart.length);
+	});
 });

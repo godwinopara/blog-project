@@ -6,7 +6,7 @@ require("express-async-errors");
 // GET ALL BLOG POSTS
 
 blogRouter.get("/", async (req, res) => {
-	const blogs = await Blog.find({});
+	const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
 	res.json(blogs);
 });
 
@@ -42,7 +42,7 @@ blogRouter.post("/", async (req, res) => {
 		author: body.author,
 		url: body.url,
 		likes: body.likes || 0,
-		userId: body.userId,
+		user: user.id,
 	});
 
 	const newBlog = await blog.save();

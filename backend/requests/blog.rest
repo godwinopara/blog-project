@@ -7,16 +7,25 @@ GET http://localhost:5000/api/blogs/648730f6393c6cf2122f0bf6 HTTP/1.1
 
 
 ###
-DELETE http://localhost:5000/api/blogs/6487b3c4e9cc60f39a6fde8f
+DELETE http://localhost:5000/api/blogs/6488ad0903acfa22bc3b281d
 
 ###
 POST http://localhost:5000/api/blogs HTTP/1.1
 Content-Type: application/json
 
+
 {
-    "title": "You don't know js",
-    "author": "Simpson",
+    "title": "Modern Javascript",
+    "author": "Frank Moore",
     "url": "https://github.com",
-    "userId": "6487aad0be114157b9889090"
-    
+    "likes": 10,
+    "userId": "6487b19dded86ccfa4c701bf"
 }
+
+# {
+#     "title": "You don't know js",
+#     "author": "Simpson",
+#     "url": "https://github.com",
+#     "userId": "6487b19dded86ccfa4c701bf"
+    
+# }

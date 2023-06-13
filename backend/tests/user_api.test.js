@@ -11,7 +11,7 @@ beforeEach(async () => {
 	await User.deleteMany({});
 
 	const passwordHash = await bcrypt.hash("godon2009", 10);
-	const user = new User({ username: "root", passwordHash });
+	const user = new User({ username: "root", name: "root user", passwordHash });
 
 	await user.save();
 }, 10000);
@@ -33,11 +33,13 @@ describe("when there is initially one user in the DB", () => {
 			.expect("Content-Type", /application\/json/);
 
 		const users = await helper.usersInDb();
+		console.log("================");
+		console.log(users);
 		expect(users).toHaveLength(userAtStart.length + 1);
 
 		const usernames = users.map((user) => user.username);
 		expect(usernames).toContain(newUser.username);
-	});
+	}, 10000);
 
 	test("should creation fails with proper statusCode and message if username already taken", async () => {
 		const userAtStart = await helper.usersInDb();
@@ -53,5 +55,5 @@ describe("when there is initially one user in the DB", () => {
 
 		const users = await helper.usersInDb();
 		expect(users).toHaveLength(userAtStart.length);
-	});
+	}, 10000);
 });

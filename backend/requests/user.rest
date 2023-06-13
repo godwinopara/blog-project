@@ -2,6 +2,8 @@
 
 GET http://localhost:5000/api/users HTTP/1.1
 
+###
+DELETE http://localhost:5000/api/users/6487aad0be114157b9889090 HTTP/1.1
 
 ###
 

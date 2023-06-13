@@ -14,6 +14,7 @@ const middleware = require("./utils/middleware");
 //Routers
 const blogRouter = require("./controller/blog");
 const userRouter = require("./controller/user");
+const loginRouter = require("./controller/auth");
 
 // Instatiate App
 const app = express();
@@ -41,6 +42,7 @@ app.use(middleware.requestLogger);
 
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
+app.use("/api/login", loginRouter);
 
 // ERROR HANDLING MIDDLEWARES
 

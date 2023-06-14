@@ -15,9 +15,10 @@ const App = () => {
 
 	async function getUserData() {
 		const userData = JSON.parse(localStorage.getItem("userToken"));
+
 		if (userData) {
 			setIsloggedIn(true);
-			blogService.getAll(userData.token).then((blogs) => setBlogs(blogs));
+			blogService.getAll().then((blogs) => setBlogs(blogs));
 		}
 	}
 
@@ -38,7 +39,7 @@ const App = () => {
 
 		try {
 			const logUserIn = await authService.login(userDetails);
-			blogService.setToken(logUserIn.token);
+			// blogService.setToken(logUserIn.token);
 			localStorage.setItem("userToken", JSON.stringify(logUserIn));
 			setUserDetails({ username: "", password: "" });
 			setIsloggedIn(true);

@@ -3,6 +3,7 @@ import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import Login from "./components/Login";
 import authService from "./services/auth";
+import AddBlog from "./components/AddBlog";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -81,6 +82,11 @@ const App = () => {
 					<div>
 						{user?.name} Logged In <button onClick={handleLogout}>Logout</button>
 					</div>
+
+					<br />
+
+					<AddBlog />
+
 					<br />
 					<div>{displayBlogs()}</div>
 				</div>

@@ -8,31 +8,44 @@ const App = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [userDetails, setUserDetails] = useState({ username: "", password: "" });
 	const [isloggedIn, setIsloggedIn] = useState(false);
+	const [user, setUser] = useState(null);
+
+	/* =======================================  */
+	/* ======================================= */
 
 	useEffect(() => {
 		getUserData();
 	}, [isloggedIn]);
+
+	/* =======================================  */
+	/* ======================================= */
 
 	async function getUserData() {
 		const userData = JSON.parse(localStorage.getItem("userToken"));
 
 		if (userData) {
 			setIsloggedIn(true);
+			setUser(userData);
 			blogService.getAll().then((blogs) => setBlogs(blogs));
 		}
 	}
 
-	//
+	/* =======================================  */
+	/* ======================================= */
+
 	const displayBlogs = () => {
 		return blogs.map((blog) => <Blog key={blog.id} blog={blog} />);
 	};
 
-	//
+	/* =======================================  */
+	/* ======================================= */
+
 	const handleOnChange = (e) => {
 		setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
 	};
 
-	//
+	/* =======================================  */
+	/* ======================================= */
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -48,13 +61,28 @@ const App = () => {
 		}
 	};
 
+	/* =======================================  */
+	/* ======================================= */
+
+	const handleLogout = () => {
+		localStorage.removeItem("userToken");
+		setIsloggedIn(false);
+	};
+
+	/* =======================================  */
+	/* ======================================= */
+
 	return (
 		<div>
 			{!isloggedIn && <Login onSubmit={handleSubmit} onChange={handleOnChange} username={userDetails.username} password={userDetails.password} />}
 			{isloggedIn && (
 				<div>
 					<h2>blogs</h2>
-					{displayBlogs()}
+					<div>
+						{user?.name} Logged In <button onClick={handleLogout}>Logout</button>
+					</div>
+					<br />
+					<div>{displayBlogs()}</div>
 				</div>
 			)}
 		</div>

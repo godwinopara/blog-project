@@ -18,7 +18,7 @@ userRouter.post("/", async (request, response, next) => {
 	const newUser = User({ username, name, passwordHash });
 
 	const savedUser = await newUser.save();
-	response.status(201).json("saved");
+	response.status(201).json(savedUser);
 });
 
 userRouter.delete("/:id", async (request, response) => {

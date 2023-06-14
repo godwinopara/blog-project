@@ -4,16 +4,6 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 require("express-async-errors");
 
-// Get authorization token
-const getTokenFrom = (request) => {
-	const authorization = request.get("authorization");
-	if (authorization && authorization.startsWith("Bearer ")) {
-		return authorization.replace("Bearer ", "");
-	}
-
-	return null;
-};
-
 // GET ALL BLOG POSTS
 
 blogRouter.get("/", async (req, res) => {
@@ -36,37 +26,44 @@ blogRouter.get("/:id", async (request, response, next) => {
 // DELETE BLOG POST
 
 blogRouter.delete("/:id", async (req, res, next) => {
-	const id = req.params.id;
-	await Blog.findByIdAndDelete(id);
-	res.status(204).end();
+	const blogId = req.params.id;
+
+	const user = req.user;
+	const verifyUserCreatedBlog = user.blogs.find((blog) => blog.toString() === blogId);
+
+	if (verifyUserCreatedBlog) {
+		await Blog.findByIdAndDelete(blogId);
+		res.status(204).end();
+	} else {
+		res.status(401).json({ error: "You can only delete a blog you created" });
+	}
 });
 
 // ADD BLOG POST
 
 blogRouter.post("/", async (req, res) => {
 	const body = req.body;
-	const decodeToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
 
-	if (!decodeToken.id) {
-		return res.status(401).json({ error: "token invalid" });
+	const user = req.user;
+
+	if (user) {
+		const blog = new Blog({
+			title: body.title,
+			author: body.author,
+			url: body.url,
+			likes: body.likes || 0,
+			user: user.id,
+		});
+
+		const newBlog = await blog.save();
+
+		user.blogs = user.blogs.concat(newBlog._id);
+		await user.save();
+
+		res.status(201).json(newBlog);
+	} else {
+		res.status(403).send("Unauthorized");
 	}
-
-	const user = await User.findById(body.userId);
-
-	const blog = new Blog({
-		title: body.title,
-		author: body.author,
-		url: body.url,
-		likes: body.likes || 0,
-		user: user.id,
-	});
-
-	const newBlog = await blog.save();
-
-	user.blogs = user.blogs.concat(newBlog._id);
-	await user.save();
-
-	res.status(201).json(newBlog);
 });
 
 module.exports = blogRouter;

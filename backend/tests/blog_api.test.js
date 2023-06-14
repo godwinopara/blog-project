@@ -12,11 +12,13 @@ beforeEach(async () => {
 }, 10000);
 
 // TEST TO CHECK IF THE API IS IN "APPLICTION/JSON FORMAT"
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNha2VzYnlrZWwiLCJpZCI6IjY0ODkwNzMxYjE5NTFhNTJiOWIyMTQzZiIsImlhdCI6MTY4Njc0MTA0NCwiZXhwIjoxNjg2NzQ0NjQ0fQ.OUSF40E2SQakzghu7QdmkJs4fdBEjMZdYIXFe8OYQRw";
 
 describe("when there is initially some blogs added", () => {
 	test("blog list are returned as json", async () => {
 		await api
 			.get("/api/blogs")
+			.set({ Authorization: token })
 			.expect("Content-Type", /application\/json/)
 			.expect(200);
 	}, 10000);
@@ -66,6 +68,7 @@ describe("addition new blog", () => {
 		await api
 			.post("/api/blogs")
 			.send(newBlog)
+			.setHeader("Authorization", token)
 			.expect(201)
 			.expect("Content-Type", /application\/json/);
 

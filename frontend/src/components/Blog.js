@@ -10,6 +10,10 @@ const Blog = ({ blog }) => {
 		const updateBlog = await blogService.updateBlog(blogToUpdate);
 	};
 
+	const handleDelete = async () => {
+		const blogToDelete = await blogService.deleteBlog(blog.id);
+	};
+
 	return (
 		<div style={{ border: "1px solid black", padding: "10px", width: "500px", marginTop: "20px" }}>
 			<p>
@@ -23,6 +27,10 @@ const Blog = ({ blog }) => {
 					</div>
 				</>
 			)}
+
+			<button onClick={handleDelete} style={{ marginTop: "20px" }}>
+				Delete Blog
+			</button>
 		</div>
 	);
 };

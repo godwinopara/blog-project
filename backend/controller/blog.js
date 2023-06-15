@@ -40,8 +40,8 @@ blogRouter.delete("/:id", async (req, res, next) => {
 	const verifyUserCreatedBlog = user.blogs.find((blog) => blog.toString() === blogId);
 
 	if (verifyUserCreatedBlog) {
-		await Blog.findByIdAndDelete(blogId);
-		res.status(204).end();
+		const blogToDelete = await Blog.findByIdAndDelete(blogId);
+		res.status(204).json(blogToDelete);
 	} else {
 		res.status(401).json({ error: "You can only delete a blog you created" });
 	}

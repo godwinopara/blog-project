@@ -10,6 +10,7 @@ const App = () => {
 	const [userDetails, setUserDetails] = useState({ username: "", password: "" });
 	const [isloggedIn, setIsloggedIn] = useState(false);
 	const [user, setUser] = useState(null);
+	const [addBlog, setAddBlog] = useState(false);
 
 	/* =======================================  */
 	/* ======================================= */
@@ -46,6 +47,7 @@ const App = () => {
 	};
 
 	/* =======================================  */
+	/* =============== LOGIN ================== */
 	/* ======================================= */
 
 	const handleSubmit = async (e) => {
@@ -53,7 +55,6 @@ const App = () => {
 
 		try {
 			const logUserIn = await authService.login(userDetails);
-			// blogService.setToken(logUserIn.token);
 			localStorage.setItem("userToken", JSON.stringify(logUserIn));
 			setUserDetails({ username: "", password: "" });
 			setIsloggedIn(true);
@@ -73,6 +74,19 @@ const App = () => {
 	/* =======================================  */
 	/* ======================================= */
 
+	const showAddBlog = () => {
+		setAddBlog((prev) => !prev);
+	};
+
+	/* =======================================  */
+	/* ======================================= */
+	const closeAddBlog = () => {
+		setAddBlog((prev) => !prev);
+	};
+
+	/* =======================================  */
+	/* ====================================== */
+
 	return (
 		<div>
 			{!isloggedIn && <Login onSubmit={handleSubmit} onChange={handleOnChange} username={userDetails.username} password={userDetails.password} />}
@@ -85,7 +99,9 @@ const App = () => {
 
 					<br />
 
-					<AddBlog />
+					{addBlog && <AddBlog showBlogForm={addBlog} />}
+					{!addBlog && <button onClick={showAddBlog}>New Blog</button>}
+					{addBlog && <button onClick={closeAddBlog}>Cancel</button>}
 
 					<br />
 					<div>{displayBlogs()}</div>

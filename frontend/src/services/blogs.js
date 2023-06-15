@@ -45,5 +45,11 @@ const addBlog = async (blogData) => {
 	return data;
 };
 
+const updateBlog = async (blogData) => {
+	const sendData = await axios.put(`${baseUrl}/${blogData.id}`, blogData);
+	const data = await sendData.data;
+	return data;
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, addBlog };
+export default { getAll, addBlog, updateBlog };

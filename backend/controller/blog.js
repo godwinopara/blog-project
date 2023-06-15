@@ -2,12 +2,13 @@ const blogRouter = require("express").Router();
 const Blog = require("../model/blog");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 require("express-async-errors");
 
 // GET ALL BLOG POSTS
-
+// .populate("user", { username: 1, name: 1 });
 blogRouter.get("/", async (req, res) => {
-	const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
+	const blogs = await Blog.find({});
 	res.json(blogs);
 });
 
@@ -28,7 +29,14 @@ blogRouter.get("/:id", async (request, response, next) => {
 blogRouter.delete("/:id", async (req, res, next) => {
 	const blogId = req.params.id;
 
+	// We need to verify if the user has permission to update the blog
+	// a middleware function was created on utils/middleware.js that
+	// verifies the user with jwt
 	const user = req.user;
+
+	//Only user who created a blog can delete so we need to verify if the
+	// user actually created the blog
+
 	const verifyUserCreatedBlog = user.blogs.find((blog) => blog.toString() === blogId);
 
 	if (verifyUserCreatedBlog) {
@@ -39,10 +47,35 @@ blogRouter.delete("/:id", async (req, res, next) => {
 	}
 });
 
+// UPDATE BLOG POST
+
+blogRouter.put("/:id", async (req, res, next) => {
+	const blogId = req.params.id;
+	const body = req.body;
+
+	// We need to verify if the user has permission to update the blog
+	// a middleware function was created on utils/middleware.js that
+	// verifies the user with jwt
+	const user = req.user;
+
+	if (user) {
+		console.log(typeof blogId);
+		const blog = await Blog.findByIdAndUpdate(blogId, body);
+
+		res.status(200).json(blog);
+	} else {
+		res.status(401).json({ error: "unauthorized" });
+	}
+});
+
 // ADD BLOG POST
 
 blogRouter.post("/", async (req, res) => {
 	const body = req.body;
+
+	// We need to verify if the user has permission (i.e logged in)
+	// to add a new bloga middleware function was created on
+	// utils/middleware.js that verifies the user with jwt
 
 	const user = req.user;
 

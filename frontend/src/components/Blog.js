@@ -1,7 +1,14 @@
 import { useState } from "react";
+import blogService from "../services/blogs";
 
 const Blog = ({ blog }) => {
 	const [showBlogDetails, setShowBlogDetails] = useState(false);
+
+	const handleClick = async () => {
+		const blogToUpdate = { ...blog };
+		blogToUpdate.likes += 1;
+		const updateBlog = await blogService.updateBlog(blogToUpdate);
+	};
 
 	return (
 		<div style={{ border: "1px solid black", padding: "10px", width: "500px", marginTop: "20px" }}>
@@ -11,7 +18,9 @@ const Blog = ({ blog }) => {
 			{showBlogDetails && (
 				<>
 					<p>{blog.url}</p>
-					<p>{blog.likes}</p>
+					<div>
+						{blog.likes} <button onClick={handleClick}>Like</button>{" "}
+					</div>
 				</>
 			)}
 		</div>
